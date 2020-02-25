@@ -2,7 +2,8 @@
 
 sudo rm /etc/nginx/sites-enabled/default
 sudo ln -s ~/web/etc/nginx.conf  /etc/nginx/sites-enabled/test.conf
-sudo ln -s ~/web/etc/gunicorn.service /etc/systemd/system/gunicorn.service
+sudo ln -s ~/web/etc/helloapp /etc/init.d/helloapp
+#sudo ln -s ~/web/etc/gunicorn.service /etc/systemd/system/gunicorn.service
 sudo /etc/init.d/nginx restart
 #sudo systemctl restart nginx
 
