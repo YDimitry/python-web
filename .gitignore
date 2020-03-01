@@ -1,3 +1,9 @@
 /env/
 __pycache__/
 db.sqlite3
+/venv/
+/.idea/
+**/migrations/[0-9][0-9][0-9][0-9]_*.py
+
+#ask/qa/migrations/0001_initial.py
+#ask/qa/migrations/0002_auto_20200301_2049.py
