@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {{ block.super }} – главная
+{% endblock %}
+{% block pagetitle %}{{ popular|default:"Последние" }} вопросы{% endblock %}
+{% block content %}
+    {% if paginator.num_pages > 1 %}
+        <h3>страница {{ page.number }}</h3>
+    {% endif %}
+    {% for obj in post_list %}
+        <div class="question">
+         <a href="{{ obj.build_url }}">{{ obj }}</a>
+         {{ obj.added_at|date:"d.m.Y" }}
+        </div>
+    {% endfor %}
+
+    {% if paginator.num_pages > 1 %}
+        <nav>
+            {% for p in paginator.page_range %}
+                <a href="{{ paginator.baseurl }}{{ p }}">{{ p }}</a>
+            {% endfor %}
+        </nav>
+    {% endif %}
+{% endblock %}
