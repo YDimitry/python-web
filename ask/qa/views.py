@@ -53,7 +53,7 @@ def popular(request, *args, **kwargs):
         page = 1
     posts = Question.objects.popular()
     paginator = Paginator(posts, 10)
-    paginator.baseurl = 'popular/?page='
+    paginator.baseurl = '?page='
     posts_page = paginator.get_page(page)
     page = paginator.page(page)
     return render(request, 'main.html', {'post_list': posts_page,
