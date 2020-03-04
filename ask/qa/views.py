@@ -13,7 +13,7 @@ def index(request, *args, **kwargs):
     except ValueError:
         page = 1
     posts = Question.objects.new()
-    paginator = Paginator(posts, 2)
+    paginator = Paginator(posts, 10)
     paginator.baseurl = '/?page='
     posts_page = paginator.get_page(page)
     page = paginator.page(page)
@@ -52,7 +52,7 @@ def popular(request, *args, **kwargs):
     except ValueError:
         page = 1
     posts = Question.objects.popular()
-    paginator = Paginator(posts, 2)
+    paginator = Paginator(posts, 10)
     paginator.baseurl = 'popular/?page='
     posts_page = paginator.get_page(page)
     page = paginator.page(page)
