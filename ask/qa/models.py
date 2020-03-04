@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
+from django.utils import timezone
 
 
 class QuestionManager(models.Manager):
@@ -15,7 +16,7 @@ class Question(models.Model):
     objects = QuestionManager()
     title = models.CharField(max_length=255)
     text = models.TextField(null=True)
-    added_at = models.DateField(blank=True, auto_now_add=True)
+    added_at = models.DateTimeField(blank=True, auto_now_add=True)
     rating = models.IntegerField(default=0, null=True)
     author = models.ForeignKey(User, null=False, on_delete=models.CASCADE)
     likes = models.ManyToManyField(User, related_name='question_like_user')
@@ -29,6 +30,6 @@ class Question(models.Model):
 
 class Answer(models.Model):
     text = models.TextField(null=True)
-    added_at = models.DateField(blank=True, auto_now_add=True)
+    added_at = models.DateTimeField(blank=True, auto_now_add=True)
     question = models.ForeignKey(Question, null=False, on_delete=models.CASCADE)
     author = models.ForeignKey(User, null=False, on_delete=models.CASCADE)

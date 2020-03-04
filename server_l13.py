@@ -2,7 +2,7 @@ import os
 import unittest
 import sys
 
-sys.path.append(r'C:\Users\user\PycharmProjects\web\ask')
+sys.path.append(r'C:\Users\dm\PycharmProjects\web\ask')
 os.environ['DJANGO_SETTINGS_MODULE'] = 'ask.settings'
 import django
 
@@ -17,7 +17,7 @@ import time
 
 
 # class TestInitData(unittest.TestCase):
-class TestInitData():
+class TestInitData:
     def test_import(self):
         from qa.models import Question
         from qa.models import Answer
@@ -41,8 +41,14 @@ class TestInitData():
         for i in range(10):
             answer = Answer.objects.create(text='answer ' + str(i), question=question, author=user)
 
+    def test_init(self):
+        from qa.models import Question
+        question = Question()
+        print(question.added_at)
+
 
 # suite = unittest.TestLoader().loadTestsFromTestCase(globals().get(sys.argv[1]))
 # unittest.TextTestRunner(verbosity=0).run(suite)
 test = TestInitData()
 test.test_import()
+# test.test_init()
