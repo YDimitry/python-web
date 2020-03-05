@@ -43,8 +43,11 @@ def question(request, *args, **kwargs):
                 form.cleaned_data['question'] = post
                 form.save()
                 return HttpResponseRedirect(post.build_url())
+            else:
+                return HttpResponse(status=200)
         else:
-            form = AnswerForm()
+
+            form = AnswerForm()  # initial={'question': post.id}
             return render(request, 'question.html', {'post': post,'answers':answers,'form':form})
     else:
         return HttpResponse(content='Такого вопроса несуществует',
