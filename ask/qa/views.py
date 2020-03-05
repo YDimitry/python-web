@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 from django.shortcuts import render
 from django.views.decorators.http import require_GET
 
-from qa.forms import AskForm
+from qa.forms import AskForm, AnswerForm
 from qa.models import Question, Answer
 
 @require_GET
@@ -37,7 +37,15 @@ def question(request, *args, **kwargs):
     if q_id:
         post = Question.objects.get(pk=q_id)
         answers = Answer.objects.all().filter(question=post)
-        return render(request, 'question.html', {'post': post,'answers':answers})
+        if request.method == 'POST':
+            form = AnswerForm(request.POST)
+            if form.is_valid():
+                form.cleaned_data['question'] = post
+                form.save()
+                return HttpResponseRedirect(post.build_url())
+        else:
+            form = AnswerForm()
+            return render(request, 'question.html', {'post': post,'answers':answers,'form':form})
     else:
         return HttpResponse(content='Такого вопроса несуществует',
                                 content_type='text/html',
@@ -46,12 +54,12 @@ def question(request, *args, **kwargs):
 def ask(request, *args, **kwargs):
     if request.method == 'POST':
         form = AskForm(request.POST)
-        if True:   # проверка на form.is_valid()
+        if form.is_valid():
             post = form.save()
             return HttpResponseRedirect(post.build_url())
     else:
         form = AskForm()
-    return render(request, 'QuestionForm.html', {'form':form})
+    return render(request, 'QuestionForm.html', {'form': form})
 
 
 

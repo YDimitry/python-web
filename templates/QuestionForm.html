@@ -6,7 +6,15 @@
 {% block pagetitle %}{% endblock %}
 
 {% block content %}
-{{ form.as_table }}
+    <form class="form-horizontal" method="post" action="/ask/">
+        <fieldset>
+            {{ form.as_p }}
+            {% csrf_token %}
+        </fieldset>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Спросить</button>
+        </div>
+    </form>
 {% endblock %}
 
 

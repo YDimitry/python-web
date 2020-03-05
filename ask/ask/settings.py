@@ -55,7 +55,9 @@ ROOT_URLCONF = 'ask.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [r'C:\Users\dm\PycharmProjects\web\templates'],
+        'DIRS': [r'C:\Users\dm\PycharmProjects\web\templates',
+                 r'c:\Users\user\PycharmProjects\web\templates'],
+
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

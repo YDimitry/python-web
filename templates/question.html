@@ -17,6 +17,17 @@
         {{ answer.text }}
     </div>
     {% endfor %}
+
+    <form class="form-horizontal" method="post">
+        <fieldset>
+            {{ form.as_p }}
+            {% csrf_token %}
+        </fieldset>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Ответить</button>
+        </div>
+    </form>
+
 {% endblock %}
 
 
