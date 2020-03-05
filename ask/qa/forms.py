@@ -20,6 +20,7 @@ class AskForm(forms.Form):
 
 class AnswerForm(forms.Form):
     text = forms.CharField(widget=forms.Textarea)
+    question = forms.CharField()
 
     def clean(self):
         user, _ = User.objects.get_or_create(username='x',

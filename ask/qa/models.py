@@ -22,7 +22,7 @@ class Question(models.Model):
     likes = models.ManyToManyField(User, related_name='question_like_user')
 
     def build_url(self):
-        return reverse(f'question', args=[self.pk])
+        return reverse('question', args=[self.pk])
 
     def __str__(self):
         return self.title
