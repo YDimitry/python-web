@@ -1,9 +1,10 @@
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator
-from django.http import HttpResponse, HttpResponseNotFound
+from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 from django.shortcuts import render
 from django.views.decorators.http import require_GET
 
+from qa.forms import AskForm
 from qa.models import Question, Answer
 
 @require_GET
@@ -43,7 +44,16 @@ def question(request, *args, **kwargs):
                                 status=404)
 
 def ask(request, *args, **kwargs):
-    return HttpResponse('You re at the qa ask')
+    if request.method == 'POST':
+        form = AskForm(request.POST)
+        if True:   # проверка на form.is_valid()
+            post = form.save()
+            return HttpResponseRedirect(post.build_url())
+    else:
+        form = AskForm()
+    return render(request, 'QuestionForm.html', {'form':form})
+
+
 
 @require_GET
 def popular(request, *args, **kwargs):
