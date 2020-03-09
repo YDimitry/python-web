@@ -4,8 +4,8 @@ from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 from django.shortcuts import render
 from django.views.decorators.http import require_GET
 
-from qa.forms import AskForm, AnswerForm
-from qa.models import Question, Answer
+from qa.forms import *
+from qa.models import *
 
 @require_GET
 def index(request, *args, **kwargs):
@@ -26,8 +26,16 @@ def login(request, *args, **kwargs):
 
 
 def signup(request, *args, **kwargs):
-    return HttpResponse('You re at the qa signup')
-
+    if request.method == 'POST':
+        form = RegUserForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            # login new user
+            request.user = user
+            return HttpResponseRedirect('/')
+    else:
+        form = RegUserForm()
+    return render(request, 'RegNewUser.html', {'form':form})
 
 def question(request, *args, **kwargs):
     try:

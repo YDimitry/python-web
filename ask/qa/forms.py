@@ -29,3 +29,22 @@ class AnswerForm(forms.Form):
 
     def save(self):
         Answer.objects.create(**self.cleaned_data)
+
+
+class RegUserForm(forms.Form):
+    username = forms.CharField()
+    email = forms.CharField()
+    password = forms.CharField()
+
+    def clean_username(self):
+        username = self.cleaned_data['username']
+        if User.objects.filter(username=username).exists():
+            raise forms.ValidationError('пользователь с таким именем уже зарегистрирован')
+        return username
+
+    def save(self):
+        return User.objects.create(**self.cleaned_data, last_login=timezone.now())
+
+class LoginForm(forms.Form):
+    username = forms.CharField()
+    password = forms.CharField()
