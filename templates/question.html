@@ -5,7 +5,9 @@
 {% endblock %}
 {% block pagetitle %}{{ post }}{% endblock %}
 {% block content %}
-
+    <div class="author">
+        Author:{{ post.author }}
+    </div>
     <div class="question" style="width: 500px;border: 10px">
         {{ post.text }}
     </div>

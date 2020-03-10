@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.utils import timezone
 
@@ -9,10 +10,10 @@ class AskForm(forms.Form):
     title = forms.CharField()
     text = forms.CharField(widget=forms.Textarea)
 
-    def clean(self):
-        user, _ = User.objects.get_or_create(username='x',
-                                             defaults={'password': 'y', 'last_login': timezone.now()})
-        self.cleaned_data['author'] = user
+    # def clean(self):
+    #     user, _ = User.objects.get_or_create(username='x',
+    #                                          defaults={'password': 'y', 'last_login': timezone.now()})
+    #     self.cleaned_data['author'] = user
 
     def save(self):
         return Question.objects.create(**self.cleaned_data)
@@ -43,8 +44,17 @@ class RegUserForm(forms.Form):
         return username
 
     def save(self):
-        return User.objects.create(**self.cleaned_data, last_login=timezone.now())
+        user = User.objects.create_user(**self.cleaned_data, last_login=timezone.now())
+        user.save()
+        return user
 
 class LoginForm(forms.Form):
     username = forms.CharField()
     password = forms.CharField()
+
+    def clean_username(self):
+        username = self.cleaned_data['username']
+        if not User.objects.filter(username=username).exists():
+            raise forms.ValidationError('пользователь с таким именем не существует')
+        return username
+

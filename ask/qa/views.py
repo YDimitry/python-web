@@ -1,4 +1,5 @@
-from django.contrib.auth.models import User
+
+from django.contrib.auth import authenticate, login
 from django.core.paginator import Paginator
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 from django.shortcuts import render
@@ -21,23 +22,33 @@ def index(request, *args, **kwargs):
     return render(request, 'main.html', {'post_list': posts_page,
                                          'paginator': paginator, 'page': page, 'popular': False })
 
-def login(request, *args, **kwargs):
-    return HttpResponse('You re at the qa login')
+def loginUser(request, *args, **kwargs):
+    form = LoginForm()
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            user = authenticate(username=form.cleaned_data['username'], password=form.cleaned_data['password'])
+            if user:
+                login(request, user)
+                return HttpResponseRedirect('/')
+    return render(request, 'LoginUser.html', {'form': form})
 
 
 def signup(request, *args, **kwargs):
+    form = RegUserForm()
     if request.method == 'POST':
         form = RegUserForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            # login new user
-            request.user = user
-            return HttpResponseRedirect('/')
-    else:
-        form = RegUserForm()
+            form.save()
+            user = authenticate(username=form.cleaned_data['username'], password=form.cleaned_data['password'])
+            if user:
+                login(request, user)
+                return HttpResponseRedirect('/')
+
     return render(request, 'RegNewUser.html', {'form':form})
 
 def question(request, *args, **kwargs):
+    print(request.user.username)
     try:
         q_id = int(kwargs.get('id'))
     except ValueError:
@@ -49,6 +60,7 @@ def question(request, *args, **kwargs):
             form = AnswerForm(request.POST)
             if form.is_valid():
                 form.cleaned_data['question'] = post
+                form.cleaned_data['author'] = request.user
                 form.save()
                 return HttpResponseRedirect(post.build_url())
             else:
@@ -66,6 +78,7 @@ def ask(request, *args, **kwargs):
     if request.method == 'POST':
         form = AskForm(request.POST)
         if form.is_valid():
+            form.cleaned_data['author'] = request.user
             post = form.save()
             return HttpResponseRedirect(post.build_url())
     else:
